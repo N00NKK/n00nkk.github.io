@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EvilGoy - Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto Mono', monospace; }
+    body, html { height: 100%; background: #0f0f0f; color: #f0f0f0; overflow-x: hidden; display: flex; flex-direction: column; }
+
+    canvas { position: fixed; inset: 0; z-index: -1; }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      flex: 1;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    h1.rgbText {
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+    }
+
+    p.rgbText {
+      font-size: 1.2rem;
+      color: #ccc;
+      max-width: 600px;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 1rem 1.8rem;
+      border: 2px solid currentColor;
+      font-weight: bold; text-transform: uppercase;
+      cursor: pointer; letter-spacing: 1px;
+      color: currentColor; transition: 0.3s; position: relative; overflow: hidden;
+    }
+    .btn span { position: relative; z-index: 1; }
+    .btn:hover { 
+      background-color: rgba(255,255,255,0.05);
+      box-shadow: 0 0 25px currentColor, 0 0 50px currentColor;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<main>
+  <h1 class="rgbText">EvilGoy is Coming Soon</h1>
+  <p class="rgbText">We’re working hard behind the scenes. Stay tuned for the launch!</p>
+
+  <div class="btn-container">
+    <a href="mailto:evilgoyservices@proton.me" class="btn"><span>Email Us</span></a>
+    <a href="https://discord.gg/egcK8wJGKz" target="_blank" class="btn"><span>Join Discord</span></a>
+    <a href="https://t.me/+FH9HMVvqLTIwMTk0" target="_blank" class="btn"><span>Join Telegram</span></a>
+  </div>
+</main>
+
+<footer class="rgbText">
+  &copy; 2026 EvilGoy
+</footer>
+
+<script>
+  // RGB glowing effect
+  const rgbElements = document.querySelectorAll('.rgbText, .btn');
+  let hue = 0;
+  function updateRGB() {
+    hue += 1;
+    if (hue > 360) hue = 0;
+    const color = `hsl(${hue}, 100%, 50%)`;
+    rgbElements.forEach(el => el.style.color = color);
+    requestAnimationFrame(updateRGB);
+  }
+  updateRGB();
+
+  // Particle background
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles;
+
+  function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function createParticles() {
+    particles = Array.from({ length: 90 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      dx: (Math.random() - 0.5) * 0.3,
+      dy: (Math.random() - 0.5) * 0.3
+    }));
+  }
+
+  function animate() {
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(124,58,237,.6)';
+    particles.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if(p.x<0||p.x>w) p.dx*=-1;
+      if(p.y<0||p.y>h) p.dy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  createParticles();
+  animate();
+</script>
+
+</body>
+</html>
