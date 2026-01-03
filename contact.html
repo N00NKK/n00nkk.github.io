@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>EvilGoy Contact</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto Mono', monospace; }
+    body, html { height: 100%; background: #0f0f0f; color: #f0f0f0; overflow-x: hidden; }
+
+    canvas { position: fixed; inset: 0; z-index: -1; }
+
+    header {
+      padding: 4rem 2rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
+    }
+
+    header p {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ccc;
+    }
+
+    main {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .contact-card {
+      background: #1a1a1a;
+      border: 2px solid currentColor;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .contact-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+    }
+
+    .contact-card h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-card p {
+      font-size: 1rem;
+      color: #ccc;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: 2px solid currentColor;
+      font-weight: bold; text-transform: uppercase;
+      cursor: pointer; letter-spacing: 1px;
+      color: currentColor; transition: 0.3s; position: relative; overflow: hidden;
+    }
+    .btn span { position: relative; z-index: 1; }
+    .btn:hover { 
+      background-color: rgba(255,255,255,0.05);
+      box-shadow: 0 0 25px currentColor, 0 0 50px currentColor;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    input, textarea {
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      border: 2px solid currentColor;
+      background: #111;
+      color: #f0f0f0;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: currentColor;
+      box-shadow: 0 0 20px currentColor;
+    }
+
+    textarea { resize: vertical; min-height: 120px; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #555;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header>
+  <h1 class="rgbText">Contact EvilGoy</h1>
+  <p class="rgbText">Have questions, suggestions, or need support? Reach out to us below.</p>
+</header>
+
+<main>
+  <div class="contact-card rgbText">
+    <h2>Email</h2>
+    <p>For inquiries and support, email us at <a href="mailto:support@evilgoy.com">support@evilgoy.com</a></p>
+    <button class="btn"><span>Email Us</span></button>
+  </div>
+
+  <div class="contact-card rgbText">
+    <h2>Discord</h2>
+    <p>Join our community and get instant help via our official Discord server.</p>
+    <button class="btn"><span>Join Discord</span></button>
+  </div>
+</main>
+
+<footer class="rgbText">
+  &copy; 2026 EvilGoy · Unauthorized distribution prohibited
+</footer>
+
+<script>
+  // RGB glow effect
+  const rgbElements = document.querySelectorAll('.rgbText, .btn');
+  let hue = 0;
+  function updateRGB() {
+    hue += 1;
+    if (hue > 360) hue = 0;
+    const color = `hsl(${hue}, 100%, 50%)`;
+    rgbElements.forEach(el => el.style.color = color);
+    requestAnimationFrame(updateRGB);
+  }
+  updateRGB();
+
+  // Particle background
+  const canvas = document.getElementById('particles');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles;
+
+  function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function createParticles() {
+    particles = Array.from({ length: 90 }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.5 + 0.5,
+      dx: (Math.random() - 0.5) * 0.3,
+      dy: (Math.random() - 0.5) * 0.3
+    }));
+  }
+
+  function animate() {
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = 'rgba(124,58,237,.6)';
+    particles.forEach(p => {
+      p.x += p.dx; p.y += p.dy;
+      if(p.x<0||p.x>w) p.dx*=-1;
+      if(p.y<0||p.y>h) p.dy*=-1;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+    });
+    requestAnimationFrame(animate);
+  }
+
+  createParticles();
+  animate();
+</script>
+
+</body>
+</html>
