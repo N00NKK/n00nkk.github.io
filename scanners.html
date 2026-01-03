@@ -5,61 +5,31 @@
   <title>EvilGoy Scanners</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    :root {
-      --bg: #030305;
-      --card: rgba(12,12,18,.85);
-      --accent: #7c3aed;
-      --accent-2: #22d3ee;
-      --text: #e5e7eb;
-      --muted: #6b7280;
-      --border: rgba(255,255,255,.06);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto Mono', monospace; }
+    body, html { height: 100%; background: #0f0f0f; color: #f0f0f0; overflow-x: hidden; }
 
-    * { box-sizing: border-box; }
+    a { color: inherit; text-decoration: none; }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: radial-gradient(circle at top, rgba(124,58,237,.15), transparent 45%), #030305;
-      color: var(--text);
-      font-family: Inter, system-ui, sans-serif;
-      overflow-x: hidden;
-    }
-
-    /* PARTICLE CANVAS */
-    canvas {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-    }
+    canvas { position: fixed; inset: 0; z-index: -1; }
 
     header {
-      padding: 90px 20px 60px;
+      padding: 6rem 2rem 3rem;
       text-align: center;
     }
 
     header h1 {
-      margin: 0;
-      font-family: Orbitron, monospace;
-      font-size: clamp(2.4rem, 4vw, 3.4rem);
-      letter-spacing: 2px;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      text-shadow: 0 0 20px currentColor, 0 0 40px currentColor;
     }
 
     header p {
-      max-width: 620px;
-      margin: 18px auto 0;
-      color: var(--muted);
-      font-size: 1.05rem;
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ccc;
     }
 
     main {
@@ -67,86 +37,86 @@
       margin: auto;
       padding: 20px 20px 90px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
     }
 
     .download-card {
-      background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)), var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 25px 80px rgba(0,0,0,.8);
-      display: flex;
-      flex-direction: column;
-      transition: transform .3s ease, box-shadow .3s ease, border .3s ease;
+      background: #1a1a1a;
+      border: 2px solid currentColor;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
     }
 
     .download-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 40px 120px rgba(0,0,0,1);
-      border-color: rgba(124,58,237,.5);
+      transform: translateY(-10px);
+      box-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
     }
 
     .badge {
-      align-self: flex-start;
-      padding: 6px 14px;
+      display: inline-block;
+      padding: 0.4rem 1rem;
       border-radius: 999px;
-      font-size: .75rem;
-      font-weight: 700;
-      letter-spacing: .6px;
-      background: rgba(124,58,237,.15);
-      color: #c4b5fd;
-      margin-bottom: 16px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+      color: #fff;
+      border: 1px solid currentColor;
     }
 
     .download-card h2 {
-      margin: 0 0 12px;
-      font-size: 1.45rem;
+      margin-bottom: 0.75rem;
+      font-size: 1.5rem;
     }
 
     .download-card p {
-      color: var(--muted);
-      line-height: 1.65;
-      font-size: .95rem;
-      flex-grow: 1;
+      color: #aaa;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
 
     .meta {
-      margin: 20px 0 22px;
-      font-size: .85rem;
-      color: #93c5fd;
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 1.5rem;
     }
 
     .download-btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 15px 20px;
-      border-radius: 14px;
-      text-decoration: none;
-      font-weight: 800;
-      letter-spacing: .5px;
-      color: #fff;
-      background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      box-shadow: 0 14px 40px rgba(124,58,237,.45);
-      transition: transform .25s ease, box-shadow .25s ease;
+      gap: 10px;
+      padding: 0.8rem 1.5rem;
+      border: 2px solid currentColor;
+      border-radius: 8px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: currentColor;
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
     }
 
+    .download-btn span { position: relative; z-index: 1; }
+
     .download-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 22px 60px rgba(34,211,238,.55);
+      transform: translateY(-5px);
+      box-shadow: 0 0 25px currentColor, 0 0 50px currentColor;
     }
 
     footer {
       text-align: center;
-      padding: 40px 10px;
-      color: var(--muted);
-      font-size: .85rem;
-      border-top: 1px solid var(--border);
-      background: linear-gradient(180deg, transparent, rgba(0,0,0,.6));
+      padding: 2rem;
+      color: #555;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+      main { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -155,50 +125,59 @@
 <canvas id="particles"></canvas>
 
 <header>
-  <h1>EvilGoy Scanners</h1>
-  <p>Best Rare Username Snipers Availiable</p>
+  <h1 class="rgbText">EvilGoy Scanners</h1>
+  <p class="rgbText">Best Rare Username Snipers Available</p>
 </header>
 
 <main>
-  <div class="download-card">
+  <div class="download-card rgbText">
     <span class="badge">Python</span>
     <h2>EvilGoy TikTok</h2>
     <p>The Original EvilGoy Scanner. (Free & Paid Versions Available)</p>
     <div class="meta">v1.0.0 · Windows · Linux · Mac</div>
-    <a href="#" class="download-btn"><i class="fa-solid fa-skull"></i> Download</a>
+    <button class="download-btn"><span><i class="fa-solid fa-skull"></i> Download</span></button>
   </div>
 
-  <div class="download-card">
+  <div class="download-card rgbText">
     <span class="badge">Python</span>
     <h2>EvilGoy YouTube</h2>
     <p>Most Advanced YouTube Handle Sniper. (Free & Paid Versions Available)</p>
     <div class="meta">v1.0.0 · Windows · Linux · Mac</div>
-    <a href="#" class="download-btn"><i class="fa-solid fa-terminal"></i> Download</a>
+    <button class="download-btn"><span><i class="fa-solid fa-terminal"></i> Download</span></button>
   </div>
 
-  <div class="download-card">
+  <div class="download-card rgbText">
     <span class="badge">BETA</span>
     <h2>EvilGoy Scratch</h2>
-    <p>The Most Advanced (and probably only) Scratch  username Sniper! (Free & Paid Versions Available)</p>
+    <p>The Most Advanced (and probably only) Scratch username Sniper! (Free & Paid Versions Available)</p>
     <div class="meta">v1.0.0 · Windows · Linux · Mac</div>
-    <a href="#" class="download-btn"><i class="fa-solid fa-biohazard"></i> Download</a>
+    <button class="download-btn"><span><i class="fa-solid fa-biohazard"></i> Download</span></button>
   </div>
 </main>
 
-<footer>
-  © 2025 EvilGoy · Unauthorized distribution prohibited
+<footer class="rgbText">
+  © 2026 EvilGoy · Unauthorized distribution prohibited
 </footer>
 
 <script>
+  // RGB glowing effect
+  const rgbElements = document.querySelectorAll('.rgbText, .download-btn, .badge');
+  let hue = 0;
+  function updateRGB() {
+    hue += 1;
+    if (hue > 360) hue = 0;
+    const color = `hsl(${hue}, 100%, 50%)`;
+    rgbElements.forEach(el => el.style.color = color);
+    requestAnimationFrame(updateRGB);
+  }
+  updateRGB();
+
+  // Particle background
   const canvas = document.getElementById('particles');
   const ctx = canvas.getContext('2d');
   let w, h, particles;
 
-  function resize() {
-    w = canvas.width = window.innerWidth;
-    h = canvas.height = window.innerHeight;
-  }
-
+  function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
   window.addEventListener('resize', resize);
   resize();
 
@@ -213,20 +192,16 @@
   }
 
   function animate() {
-    ctx.clearRect(0, 0, w, h);
+    ctx.clearRect(0,0,w,h);
     ctx.fillStyle = 'rgba(124,58,237,.6)';
-
     particles.forEach(p => {
-      p.x += p.dx;
-      p.y += p.dy;
-      if (p.x < 0 || p.x > w) p.dx *= -1;
-      if (p.y < 0 || p.y > h) p.dy *= -1;
-
+      p.x += p.dx; p.y += p.dy;
+      if(p.x<0||p.x>w) p.dx*=-1;
+      if(p.y<0||p.y>h) p.dy*=-1;
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
       ctx.fill();
     });
-
     requestAnimationFrame(animate);
   }
 
