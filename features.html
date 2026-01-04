@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EvilGoy — Features</title>
+  <link rel="icon" href="https://iili.io/fjpExgj.md.jpg" type="image/jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    body {
+      background: #0e0e0e;
+      color: #eaeaea;
+      overflow-x: hidden;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background: rgba(0,0,0,0.9);
+      box-shadow: 0 0 20px rgba(0,255,255,0.25);
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      text-shadow: 0 0 15px currentColor;
+    }
+
+    nav a {
+      margin-left: 1.5rem;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #ff00ff;
+    }
+
+    section {
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    section h2 {
+      font-size: 2.6rem;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 0 15px currentColor;
+    }
+
+    section p {
+      font-size: 1.1rem;
+      color: #cfcfcf;
+      line-height: 1.7;
+      max-width: 900px;
+    }
+
+    .feature-group {
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: #151515;
+      border: 2px solid currentColor;
+      border-radius: 14px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 0 35px currentColor;
+    }
+
+    .feature-card h3 {
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-card ul {
+      list-style: none;
+      margin-top: 1rem;
+    }
+
+    .feature-card li {
+      margin-bottom: 0.6rem;
+      color: #bdbdbd;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, currentColor, transparent);
+      margin: 4rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+      color: #666;
+      background: #090909;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1 id="headerTitle">EvilGoy</h1>
+  <nav>
+    <a href="#profiles">Profiles</a>
+    <a href="#tracking">Tracking</a>
+    <a href="#fingerprinting">Fingerprinting</a>
+    <a href="#architecture">Architecture</a>
+  </nav>
+</header>
+
+<section>
+  <h2 class="rgbText">Feature Overview</h2>
+  <p>
+    EvilGoy is a local-only privacy extension designed to reduce tracking,
+    fingerprinting, and data leakage without breaking websites.
+    <br><br>
+    Nothing leaves your browser. No servers. No analytics. No accounts.
+  </p>
+</section>
+
+<div class="divider"></div>
+
+<section id="profiles">
+  <h2 class="rgbText">Profiles System</h2>
+
+  <div class="feature-group">
+
+    <div class="feature-card rgbText">
+      <h3>Default</h3>
+      <ul>
+        <li>Balanced privacy protection</li>
+        <li>Minimal website breakage</li>
+        <li>Recommended for daily browsing</li>
+      </ul>
+    </div>
+
+    <div class="feature-card rgbText">
+      <h3>Strict</h3>
+      <ul>
+        <li>Maximum privacy</li>
+        <li>All defenses enabled</li>
+        <li>Some sites may break (logins, video calls)</li>
+      </ul>
+    </div>
+
+    <div class="feature-card rgbText">
+      <h3>Off</h3>
+      <ul>
+        <li>Disables EvilGoy completely</li>
+        <li>Full site compatibility</li>
+        <li>Ideal for banking or work tools</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="tracking">
+  <h2 class="rgbText">Tracking & Leak Prevention</h2>
+
+  <div class="feature-card rgbText">
+    <h3>Tracker Blocker</h3>
+    <ul>
+      <li>Blocks Google Analytics & DoubleClick</li>
+      <li>Blocks Meta (Facebook) pixels</li>
+      <li>Blocks TikTok tracking scripts</li>
+      <li>Blocks generic ad & telemetry endpoints</li>
+      <li>Uses Chrome declarativeNetRequest</li>
+      <li>No request inspection or logging</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Anti-WebRTC Leak</h3>
+    <ul>
+      <li>Removes WebRTC APIs entirely</li>
+      <li>Prevents real IP leaks even with VPNs</li>
+      <li>Stops WebRTC-based fingerprinting</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Referrer Trimming</h3>
+    <ul>
+      <li>Removes referrer headers</li>
+      <li>Prevents link-based tracking</li>
+      <li>Stops referral analytics & correlation</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="fingerprinting">
+  <h2 class="rgbText">Fingerprint Defense</h2>
+
+  <div class="feature-card rgbText">
+    <h3>User-Agent Spoofing</h3>
+    <ul>
+      <li>Replaces real browser & OS details</li>
+      <li>Prevents OS detection</li>
+      <li>Reduces targeted exploit risk</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Timezone Normalization</h3>
+    <ul>
+      <li>Forces UTC timezone</li>
+      <li>Removes geographic inference</li>
+      <li>Blocks region-based fingerprinting</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Screen Size Spoofing</h3>
+    <ul>
+      <li>Returns standardized screen dimensions</li>
+      <li>Prevents laptop & monitor fingerprinting</li>
+      <li>Stops multi-monitor detection</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Canvas Fingerprint Protection</h3>
+    <ul>
+      <li>Adds subtle pixel noise</li>
+      <li>Breaks deterministic canvas hashes</li>
+      <li>Makes fingerprint IDs unreliable</li>
+    </ul>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<section id="architecture">
+  <h2 class="rgbText">Optional & Advanced Features</h2>
+
+  <div class="feature-card rgbText">
+    <h3>Cookie Hardening</h3>
+    <ul>
+      <li>Prevents persistent cookies</li>
+      <li>Allows session-only behavior</li>
+      <li>Disabled by default for compatibility</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Search Query Poisoning</h3>
+    <ul>
+      <li>Injects periodic fake search queries</li>
+      <li>Confuses interest profiling algorithms</li>
+      <li>Disabled by default due to aggressiveness</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Privacy-Safe Request Inspector</h3>
+    <ul>
+      <li>Shows number of blocked requests</li>
+      <li>No URLs, domains, or request data</li>
+      <li>No logging, ever</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Modular Architecture</h3>
+    <ul>
+      <li>Each feature is isolated</li>
+      <li>No hidden behavior</li>
+      <li>Safe future expansion</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Local-Only Storage</h3>
+    <ul>
+      <li>Uses chrome.storage.local</li>
+      <li>No sync, no cloud</li>
+      <li>No telemetry or analytics</li>
+    </ul>
+  </div>
+
+  <div class="feature-card rgbText">
+    <h3>Chrome Web Store Safe</h3>
+    <ul>
+      <li>Manifest V3 compliant</li>
+      <li>No remote code execution</li>
+      <li>Fully auditable</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  &copy; 2026 EvilGoy — Privacy should feel powerful.
+</footer>
+
+<script>
+  const rgbElements = document.querySelectorAll('.rgbText, #headerTitle');
+  let hue = 0;
+
+  function updateRGB() {
+    hue = (hue + 0.5) % 360;
+    const color = `hsl(${hue}, 100%, 50%)`;
+    rgbElements.forEach(el => el.style.color = color);
+    requestAnimationFrame(updateRGB);
+  }
+
+  updateRGB();
+</script>
+
+</body>
+</html>
