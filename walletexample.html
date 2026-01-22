@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoVault - Secure Wallet Simulator</title>
+  <!-- Phosphor Icons for modern iconography -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --bg-panel: #181b26;
+      --bg-hover: #232736;
+      --primary: #f7931a;
+      /* Bitcoin Orange */
+      --primary-hover: #d68412;
+      --text-main: #ffffff;
+      --text-muted: #949aa4;
+      --border: #2e3445;
+      --success: #00e676;
+      --danger: #ff1744;
+      --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    aside {
+      width: 260px;
+      background-color: var(--bg-panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand i {
+      color: var(--primary);
+      font-size: 1.8rem;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      width: 100%;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s;
+      margin-bottom: 8px;
+    }
+
+    nav button:hover {
+      background-color: var(--bg-hover);
+      color: var(--text-main);
+    }
+
+    nav button.active {
+      background-color: rgba(247, 147, 26, 0.1);
+      color: var(--primary);
+    }
+
+    nav button.active i {
+      color: var(--primary);
+    }
+
+    /* Main Content */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    header {
+      padding: 20px 30px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg-dark);
+    }
+
+    .header-title h2 {
+      font-size: 1.25rem;
+    }
+
+    .header-title p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--bg-hover);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Views */
+    .view-section {
+      display: none;
+      padding: 30px;
+      flex: 1;
+      overflow-y: auto;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Dashboard Cards */
+    .balance-card {
+      background: linear-gradient(135deg, #232736 0%, #181b26 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: var(--primary);
+      opacity: 0.1;
+      border-radius: 50%;
+    }
+
+    .balance-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .balance-amount {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .balance-amount span {
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 15px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-hover);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: #2e3445;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .stat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .stat-icon {
+      padding: 10px;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .stat-trend {
+      font-size: 0.85rem;
+      color: var(--success);
+    }
+
+    /* Address Section */
+    .address-box {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .qr-placeholder {
+      width: 200px;
+      height: 200px;
+      background-color: white;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .qr-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .wallet-address {
+      font-family: monospace;
+      background-color: var(--bg-dark);
+      padding: 15px;
+      border-radius: 6px;
+      color: var(--text-muted);
+      word-break: break-all;
+      font-size: 0.9rem;
+      border: 1px dashed var(--border);
+    }
+
+    /* Transactions */
+    .tx-list {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .tx-item {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid var(--border);
+      transition: background-color 0.2s;
+    }
+
+    .tx-item:last-child {
+      border-bottom: none;
+    }
+
+    .tx-item:hover {
+      background-color: var(--bg-hover);
+    }
+
+    .tx-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 15px;
+    }
+
+    .tx-icon.in {
+      color: var(--success);
+    }
+
+    .tx-icon.out {
+      color: var(--danger);
+    }
+
+    .tx-info {
+      flex: 1;
+    }
+
+    .tx-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .tx-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .tx-amount {
+      font-weight: 700;
+    }
+
+    .tx-amount.positive {
+      color: var(--success);
+    }
+
+    .tx-amount.negative {
+      color: var(--text-main);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      z-index: 1000;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 450px;
+      padding: 30px;
+      transform: translateY(20px);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-main);
+      font-family: var(--font-family);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 2000;
+    }
+
+    .toast {
+      background-color: var(--bg-panel);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--primary);
+      padding: 15px 20px;
+      border-radius: 4px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      aside {
+        position: fixed;
+        left: -260px;
+        height: 100%;
+        z-index: 100;
+      }
+
+      aside.open {
+        left: 0;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-main);
+      font-size: 1.5rem;
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="brand">
+      <i class="ph ph-currency-btc"></i>
+      <span>CryptoVault</span>
+    </div>
+    <nav>
+      <button class="active" onclick="switchView('dashboard')">
+                <i class="ph ph-squares-four"></i> Dashboard
+            </button>
+      <button onclick="switchView('addresses')">
+                <i class="ph ph-wallet"></i> Wallets
+            </button>
+      <button onclick="switchView('transactions')">
+                <i class="ph ph-arrows-left-right"></i> History
+            </button>
+      <button onclick="switchView('security')">
+                <i class="ph ph-shield-check"></i> Security
+            </button>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div style="display: flex; align-items: center;">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()">
+                    <i class="ph ph-list"></i>
+                </button>
+        <div class="header-title">
+          <h2 id="page-title">Dashboard</h2>
+          <p id="page-subtitle">Overview of your assets</p>
+        </div>
+      </div>
+      <div class="user-profile">
+        <div class="avatar">JS</div>
+      </div>
+    </header>
+
+    <!-- Dashboard View -->
+    <section id="dashboard" class="view-section active">
+      <div class="balance-card">
+        <div class="balance-label">Total Balance</div>
+        <div class="balance-amount">
+          0.00000000 BTC
+          <span id="usd-value">($0.00)</span>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-primary" onclick="openModal('send-modal')">
+                        <i class="ph ph-paper-plane-right"></i> Send
+                    </button>
+          <button class="btn btn-secondary" onclick="openModal('receive-modal')">
+                        <i class="ph ph-download-simple"></i> Receive
+                    </button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-icon"><i class="ph ph-trend-up"></i></span>
+            <span class="stat-trend">+2.4%</span>
+          </div>
+          <div class="stat-value">24h Change</div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">vs. last 24h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-icon"><i class="ph ph-arrows-left-right"></i></span>
+          </div>
+          <div class="stat-value">12</div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Transactions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-icon"><i class="ph ph-qr-code"></i></span>
+          </div>
+          <div class="stat-value">Active</div>
+          <div style="color: var(--text-muted); font-size: 0.9rem;">Wallet Status</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wallets View -->
+    <section id="addresses" class="view-section">
+      <div class="address-box">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Primary Wallet</h3>
+          <span style="background: var(--success); color: #000; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold;">MAIN</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">This wallet generates a unique address for every
+          transaction.</p>
+
+        <div class="qr-placeholder">
+          <!-- Using a placeholder QR code API -->
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="QR Code">
+        </div>
+
+        <div class="wallet-address" id="wallet-address">
+          Generating address...
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button class="btn btn-secondary" style="flex: 1; justify-content: center;" onclick="copyAddress()">
+                        <i class="ph ph-copy"></i> Copy
+                    </button>
+          <button class="btn btn-secondary" style="flex: 1; justify-content: center;" onclick="showToast('Address exported to clipboard', 'info')">
+                        <i class="ph ph-export"></i> Export
+                    </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Transactions View -->
+    <section id="transactions" class="view-section">
+      <div class="tx-list" id="tx-list-container">
+        <!-- Transactions injected by JS -->
+      </div>
+    </section>
+
+    <!-- Security View -->
+    <section id="security" class="view-section">
+      <div class="stat-card">
+        <div class="stat-header">
+          <h3>Security Status</h3>
+          <span style="color: var(--success); font-weight: bold;">SECURE</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Your wallet is encrypted with AES-256 and protected by
+          a strong passphrase.</p>
+
+        <div style="margin-bottom: 15px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span>Encryption Level</span>
+            <span>AES-256 GCM</span>
+          </div>
+          <div style="height: 6px; background: var(--bg-dark); border-radius: 3px; overflow: hidden;">
+            <div style="width: 100%; height: 100%; background: var(--success);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card" style="margin-top: 20px;">
+        <h3>Connected Devices</h3>
+        <div style="display: flex; align-items: center; margin-top: 15px; gap: 15px;">
+          <div class="avatar" style="width: 50px; height: 50px;">L</div>
+          <div>
+            <div style="font-weight: 600;">Localhost (This Browser)</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Active now</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Send Modal -->
+  <div id="send-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Send Bitcoin</h3>
+        <button onclick="closeModal('send-modal')" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-size:1.5rem;">
+                    <i class="ph ph-x"></i>
+                </button>
+      </div>
+      <div class="form-group">
+        <label>Recipient Address</label>
+        <input type="text" class="form-control" placeholder="bc1..." id="send-address">
+      </div>
+      <div class="form-group">
+        <label>Amount (BTC)</label>
+        <input type="number" step="0.00000001" class="form-control" placeholder="0.00" id="send-amount">
+      </div>
+      <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="processTransaction('out')">
+                Confirm Send
+            </button>
+    </div>
+  </div>
+
+  <!-- Receive Modal -->
+  <div id="receive-modal" class="modal-overlay">
+    <div class="modal" style="text-align: center;">
+      <div class="modal-header" style="justify-content: center;">
+        <h3>Receive Bitcoin</h3>
+      </div>
+      <p style="color: var(--text-muted);">Scan this QR code with your wallet app to send funds.</p>
+      <div class="qr-placeholder" style="width: 180px; height: 180px; margin: 20px auto;">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" alt="QR Code">
+      </div>
+      <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="copyAddress()">
+                <i class="ph ph-copy"></i> Copy Address
+            </button>
+      <button class="btn btn-secondary" style="width: 100%; justify-content: center; margin-top: 10px;" onclick="closeModal('receive-modal')">
+                Close
+            </button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // --- State Management ---
+        const state = {
+            balance: 0.00000000,
+            address: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+            transactions: []
+        };
+
+        // --- Mock Data Initialization ---
+        function init() {
+            // Add some initial mock transactions
+            const mockTxs = [
+                { type: 'in', title: 'Received from 0x8a...2f', subtitle: 'Today, 10:23 AM', amount: 0.04500000 },
+                { type: 'out', title: 'Sent to 1A1z...1P', subtitle: 'Yesterday, 4:15 PM', amount: -0.00120000 },
+                { type: 'in', title: 'Mined Block Reward', subtitle: '2 days ago', amount: 0.00625000 },
+                { type: 'out', title: 'Exchange Withdrawal', subtitle: '3 days ago', amount: -0.05000000 },
+            ];
+
+            state.transactions = mockTxs;
+            updateUI();
+        }
+
+        // --- UI Updates ---
+        function updateUI() {
+            // Update Balance
+            const btcEl = document.querySelector('.balance-amount');
+            btcEl.innerHTML = `${state.balance.toFixed(8)} BTC <span id="usd-value">($${(state.balance * 64200).toFixed(2)})</span>`;
+            
+            // Update Address
+            document.getElementById('wallet-address').innerText = state.address;
+
+            // Render Transactions
+            const txList = document.getElementById('tx-list-container');
+            txList.innerHTML = '';
+
+            if (state.transactions.length === 0) {
+                txList.innerHTML = '<div class="empty-state">No transactions found.</div>';
+                return;
+            }
+
+            state.transactions.forEach(tx => {
+                const isPositive = tx.amount > 0;
+                const amountClass = isPositive ? 'positive' : 'negative';
+                const sign = isPositive ? '+' : '';
+                
+                const iconClass = tx.type === 'in' ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
+                const colorClass = tx.type === 'in' ? 'in' : 'out';
+
+                const html = `
+                    <div class="tx-item">
+                        <div class="tx-icon ${colorClass}">
+                            <i class="ph ${iconClass}" style="font-size: 1.2rem;"></i>
+                        </div>
+                        <div class="tx-info">
+                            <div class="tx-title">${tx.title}</div>
+                            <div class="tx-subtitle">${tx.subtitle}</div>
+                        </div>
+                        <div class="tx-amount ${amountClass}">${sign}${tx.amount.toFixed(8)} BTC</div>
+                    </div>
+                `;
+                txList.innerHTML += html;
+            });
+        }
+
+        // --- Navigation Logic ---
+        function switchView(viewId) {
+            // Update Menu
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            event.currentTarget.classList.add('active'); // Assumes onclick passes event context implicitly or we find the button
+
+            // Update Sections
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+
+            // Update Header
+            const titles = {
+                'dashboard': ['Dashboard', 'Overview of your assets'],
+                'addresses': ['Wallets', 'Manage your receiving addresses'],
+                'transactions': ['History', 'Past transactions and transfers'],
+                'security': ['Security', 'Encryption and device management']
+            };
+            document.getElementById('page-title').innerText = titles[viewId][0];
+            document.getElementById('page-subtitle').innerText = titles[viewId][1];
+
+            // Close mobile sidebar if open
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // --- Interaction Logic ---
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('open');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('open');
+            // Clear inputs
+            document.getElementById('send-address').value = '';
+            document.getElementById('send-amount').value = '';
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(state.address).then(() => {
+                showToast('Address copied to clipboard', 'success');
+            });
+        }
+
+        function processTransaction(type) {
+            const addressInput = document.getElementById('send-address');
+            const amountInput = document.getElementById('send-amount');
+            
+            const address = addressInput.value.trim();
+            const amount = parseFloat(amountInput.value);
+
+            if (!address || isNaN(amount) || amount <= 0) {
+                showToast('Please enter a valid address and amount', 'error');
+                return;
+            }
+
+            if (amount > state.balance) {
+                showToast('Insufficient funds', 'error');
+                return;
+            }
+
+            // Simulate processing
+            closeModal('send-modal');
+            showToast('Processing transaction...', 'info');
+
+            setTimeout(() => {
+                // Update state
+                state.balance -= amount;
+                
+                // Add to history
+                const newTx = {
+                    type: type, // 'out'
+                    title: `Sent to ${address.substring(0, 6)}...${address.substring(address.length - 4)}`,
+                    subtitle: 'Just now',
+                    amount: -amount
+                };
+                state.transactions.unshift(newTx);
+
+                updateUI();
+                showToast('Transaction successful!', 'success');
+            }, 1500);
+        }
+
+        // --- Toast System ---
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            
+            let icon = 'ph-info';
+            let color = 'var(--primary)';
+            
+            if (type === 'success') { icon = 'ph-check-circle'; color = 'var(--success)'; }
+            if (type === 'error') { icon = 'ph-warning-circle'; color = 'var(--danger)'; }
+
+            toast.style.borderLeftColor = color;
+            toast.innerHTML = `
+                <i class="ph ${icon}" style="color: ${color}; font-size: 1.2rem;"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize App
+        init();
+
+  </script>
+</body>
+
+</html>
